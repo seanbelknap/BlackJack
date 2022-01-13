@@ -1,97 +1,104 @@
+const readline = require('readline-sync');
 const suits = ['Hearts', 'Spades', 'Diamonds', 'Clubs'];
 const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 
 const deck = [];
 
-//set values to A, J, K, Q
-
-// const cardsObjExample = {
-//     suit: "Heart",
-//     value: "A"
-// }
-
 function makeDeck() {
   for (let i = 0; i < suits.length; i++) {
     for (let j = 0; j < values.length; j++) {
-      // deck.push(values[j] + ' of ' + suits[i]);
       const cardObj = {
           suit: suits[i],
           value: values[j],
           display: values[j] + " of " + suits[i]
       };
-    //   deck.push({suit: suits[i], value : values[j]});
     deck.push(cardObj);
     }
   }
-//   console.log(deck);
 }
-
-makeDeck();
-
-// console.log(deck.length);
-// const pullRandomCard = deck[Math.floor(Math.random() * deck.length - 1)]
 
 function dealOneCard() {
     let randomIndex = Math.floor(Math.random() * deck.length - 1);
-
-    const randomCard = deck.splice(randomIndex, 1); // this will remove the random card at its index
-    // console.log(deck); // this will verify the deck is without the random card
-    // console.log(randomCard)
+    const randomCard = deck.splice(randomIndex, 1);
+    console.log(randomCard)
     return randomCard[0];
 }
-
-// eventually, we want to have a playGame function
 
 const dealerHands = [];
 const playerHands = [];
 
+function setUp() {
+  // set up the round
+  playerHands.push(dealOneCard());
+  dealerHands.push(dealOneCard());
+  playerHands.push(dealOneCard());
+  dealerHands.push(dealOneCard());
+}
+
+function calculateTotal(array){
+  let total = 0;
+  for (let i = 0; i < array.length; i++) {
+      const currentCard = array[i];
+      if(currentCard.value == 'K' || currentCard.value == 'Q' || currentCard.value == 'J'){
+        total += 10;
+      }
+      else if(currentCard.value == 'A'){
+        total += 1;
+      }
+      else {
+        total += parseInt(currentCard.value);
+      }
+  }
+  return total;
+}
+
+function calculateAndDisplay() {
+  dealerHands.forEach((card, index) => {
+    const properNumber = index + 1;
+    console.log(`Dealer's ${properNumber} Card: ${card.display}`);
+  });
+  console.log(`Dealer's Total: ${calculateTotal(dealerHands)}`);
+  playerHands.forEach((card, index) => {
+    console.log(`Player's ${index + 1} Card: ${card.display}`);
+  });;
+  console.log(`Player's Total: ${calculateTotal(playerHands)}`);
+}
+
+function nextStep(userInput){
+  if(userInput == 'H'){
+    playerHands.push(dealOneCard());
+    return true;
+  }
+  else if (userInput == 'S'){
+    return false;
+  }
+}
 
 function playGame() {
-
-    // set up the round
-    dealerHands.push(dealOneCard(0));
-    dealerHands.push(dealOneCard(1));
-    playerHands.push(dealOneCard());
-    playerHands.push(dealOneCard());
-    displayHands();
-    // players choice
-}
-let array = dealOneCard();
-
-function calculateTotal(array) {
-    // the function will be invoked with either the player array or dealer array
-  let total = 0;
-  for(value in array){
-    if (array[0].value == 'K' || array[0].value == 'Q' || array[0].value == 'J'){
-      total += 10;
-    } else if (array[0].value == 'A'){
-      total += 1;
-      } else {
-        total += parseInt(array[0].value);
-      }
-    // create a function that will calculate the "value" total of the array
-   } // return a string value of the numeric total
-  console.log(total);
-}
-
-calculateTotal();
-
-function displayHands() {
-    console.log("dealer first card: " + dealerHands[0].display);
-    console.log("dealer second card: " + dealerHands[1].display);
-    console.log("Dealer hand total: " + "21");
-
-    console.log("player first card: " + playerHands[0].display);
-    console.log("player second card: " + playerHands[1].display);
-    console.log("player hand total: " + '');
+  makeDeck();
+  setUp();
+  calculateAndDisplay();
+  let next = true;
+  while (next) {
+    const userInput = readline.question("H/S ");
+    next = nextStep(userInput);
+    calculateAndDisplay();
+  }
+  console.log("I'm done!!!");
+  // players choice
 }
 
 playGame();
-//create a dealer hand
-  //randomize hand from deck
 
-//create a player hand
-  //randomize hand from deck
-
-
-// compare decks
+// homework:
+// 1. review the refactor code✔
+// example for foreach
+// [1, 2, 3, 4]
+// try different things with for each to get your desired result
+// 2. validate the user input
+// if user puts in like lower cases or G
+// reprompt the userInput
+// 3. code out the busting condition in while loop
+// 4. psuedocode and plan for dealers actions
+// 5. feeling brave, code it
+// 6. BONUS: inside calculateTotal function, replace the if statements by using an object!!!!
