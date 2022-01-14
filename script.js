@@ -68,11 +68,17 @@ function nextStep(userInput){
   if(userInput == 'H'){
     playerHands.push(dealOneCard());
     return true;
-  }
+    }
   else if (userInput == 'S'){
     return false;
+    }
+  else {
+    console.log("Invalid Input, Please Try Again.");
+    return userInput;
   }
 }
+  
+
 
 function playGame() {
   makeDeck();
@@ -80,11 +86,19 @@ function playGame() {
   calculateAndDisplay();
   let next = true;
   while (next) {
-    const userInput = readline.question("H/S ");
-    next = nextStep(userInput);
-    calculateAndDisplay();
+      const userInput = readline.question("H/S ").toUpperCase();
+      if(next && calculateTotal(playerHands) < 21 ){
+        next = nextStep(userInput);
+        calculateAndDisplay();
+      }
+      else if(calculateTotal(playerHands) == 21){
+        console.log('Winner!!');
+      }
+      else{
+        console.log("Busted!!");
+        next = false;
+      }
   }
-  console.log("I'm done!!!");
   // players choice
 }
 
@@ -96,7 +110,7 @@ playGame();
 // [1, 2, 3, 4]
 // try different things with for each to get your desired result
 // 2. validate the user input
-// if user puts in like lower cases or G
+// if user puts in like lower cases or G✔
 // reprompt the userInput
 // 3. code out the busting condition in while loop
 // 4. psuedocode and plan for dealers actions
