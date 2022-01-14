@@ -77,6 +77,10 @@ function nextStep(userInput){
     return userInput;
   }
 }
+  //function dealerTurn()
+  //if dealer total is 16 or less must hit
+  //if delaer total is 17 or more must stay
+  //waits till after play to go again
   
 
 
@@ -91,8 +95,9 @@ function playGame() {
         next = nextStep(userInput);
         calculateAndDisplay();
       }
-      else if(calculateTotal(playerHands) == 21){
+      else if(calculateTotal(playerHands) === 21){
         console.log('Winner!!');
+        next = false;
       }
       else{
         console.log("Busted!!");
