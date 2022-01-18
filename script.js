@@ -70,7 +70,13 @@ function nextStep(userInput){
     return true;
     }
   else if (userInput == 'S'){
-    return false;
+     console.log("User stay");
+     //if statement comparing dealer and player total
+        //if tie and dealer total is greater then 17 
+            // console log tie
+            // return false
+        //if tie and dealer total is less then 17 
+            // return true;
     }
   else {
     console.log("Invalid Input, Please Try Again.");
@@ -78,9 +84,17 @@ function nextStep(userInput){
   }
 }
   //function dealerTurn()
-  //if dealer total is 16 or less must hit
-  //if delaer total is 17 or more must stay
-  //waits till after play to go again
+  function dealerTurn(){
+      //if dealer total is 16 or less must hit
+      if(calculateTotal(dealerHands) < 17){
+          dealerHands.push(dealOneCard());
+      }
+      //if dealer total is 17 or more must stay
+      else if (calculateTotal(dealerHands) > 21){
+        console.log('Dealer Busted!');
+      }
+      //waits till after play to go again
+    }
   
 
 
@@ -93,15 +107,23 @@ function playGame() {
       const userInput = readline.question("H/S ").toUpperCase();
       if(next && calculateTotal(playerHands) < 21 ){
         next = nextStep(userInput);
+        dealerTurn();
         calculateAndDisplay();
       }
+      
+      // if user stay dont show (userInput)
+      
       else if(calculateTotal(playerHands) === 21){
         console.log('Winner!!');
         next = false;
       }
+      else if ((calculateTotal(dealerHands) <= 21) > calculateTotal(playerHands) || calculateTotal(playerHands) > 21){
+        console.log('Dealer win!')
+        return false;
+    }
       else{
         console.log("Busted!!");
-        next = false;
+        return false;
       }
   }
   // players choice
